@@ -15,6 +15,7 @@ public class SettingsActivity extends Activity {
     private Spinner mMapType;
     private CheckBox mInvertLightness;
     private SeekBar mZoom;
+    private Switch mWiFiOnly;
 
     private SharedPreferences mPrefs;
     private boolean isSomethingModified = false;
@@ -29,6 +30,7 @@ public class SettingsActivity extends Activity {
         mInvertLightness = (CheckBox) findViewById(R.id.check_inverse);
         mZoom = (SeekBar) findViewById(R.id.zoom_bar);
         mZoomValue = (TextView) findViewById(R.id.zoom_value);
+        mWiFiOnly = (Switch) findViewById(R.id.wifi_only_switch);
 
         ArrayAdapter<CharSequence> mapTypesAdapter =
             ArrayAdapter.createFromResource(this,
@@ -88,6 +90,13 @@ public class SettingsActivity extends Activity {
             }
         });
 
+        mWiFiOnly.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+                saveBooleanPreference(Constants.PREF_WIFI_ONLY, checked);
+            }
+        });
+
         initFromPreferences();
     }
 
@@ -112,12 +121,14 @@ public class SettingsActivity extends Activity {
         int mapMode = mPrefs.getInt(Constants.PREF_MAP_TYPE, Constants.PREF_MAP_TYPE_DEFAULT);
         int zoom = mPrefs.getInt(Constants.PREF_ZOOM, Constants.PREF_ZOOM_DEFAULT);
         int updateInterval = mPrefs.getInt(Constants.PREF_UPDATE_INTERVAL, Constants.PREF_UPDATE_INTERVAL_DEFAULT);
+        boolean wifiOnly = mPrefs.getBoolean(Constants.PREF_WIFI_ONLY, Constants.PREF_WIFI_ONLY_DEFAULT);
 
         mInvertLightness.setChecked(isInverted);
         mMapType.setSelection(mapMode);
         mUpdateInterval.setSelection(updateInterval);
         mZoom.setProgress(zoom);
         mZoomValue.setText(String.valueOf(zoom));
+        mWiFiOnly.setChecked(wifiOnly);
     }
 
     private void saveBooleanPreference(String key, boolean value) {
