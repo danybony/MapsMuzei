@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="fake_locations">
+        <item>41.889767,12.4926499</item> <!--Colosseum, Rome-->
+        <item>48.8581706,2.294695</item> <!--Tour Eiffel, Paris-->
+        <item>25.1970379,55.2743848</item> <!--Burj Khalifa, Dubai -->
+        <item>40.689784,-74.045431</item> <!--Statue of Liberty, New York-->
+        <item>52.5164541,13.3777558</item> <!--Brandenburg Gate, Berlin-->
+        <item>-33.8550533,151.2214656</item> <!--Opera House, Sydney-->
+    </string-array>
+</resources>
