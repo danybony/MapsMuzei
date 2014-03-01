@@ -1,7 +1,7 @@
 Maps to Muzei
 ================
 
-![Icon](https://raw.github.com/danybony/MapsMuzei/develop/MapsMuzei/src/main/res/drawable-xhdpi/ic_launcher.png)
+![Icon](https://raw.github.com/danybony/MapsMuzei/develop/main/src/main/res/drawable-xhdpi/ic_launcher.png)
 
 **Maps to Muzei** is an extension for Roman Nurik's [muzei](http://muzei.co) which creates a wallpaper based on the map of your current location.
 
