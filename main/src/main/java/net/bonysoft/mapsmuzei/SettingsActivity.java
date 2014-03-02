@@ -1,34 +1,41 @@
 package net.bonysoft.mapsmuzei;
 
+import android.animation.LayoutTransition;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.*;
 
 public class SettingsActivity extends Activity {
 
+    private ViewGroup mMainView;
     private TextView mZoomValue;
     private Spinner mUpdateInterval;
     private Spinner mMapType;
     private CheckBox mInvertLightness;
     private SeekBar mZoom;
+    private Switch mWiFiOnly;
 
     private SharedPreferences mPrefs;
     private boolean isSomethingModified = false;
+    private boolean isVisibilityInitDone = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
 
+        mMainView = (ViewGroup) findViewById(R.id.layout_main);
         mMapType = (Spinner) findViewById(R.id.map_type_spinner);
         mUpdateInterval = (Spinner) findViewById(R.id.update_interval_spinner);
         mInvertLightness = (CheckBox) findViewById(R.id.check_inverse);
         mZoom = (SeekBar) findViewById(R.id.zoom_bar);
         mZoomValue = (TextView) findViewById(R.id.zoom_value);
+        mWiFiOnly = (Switch) findViewById(R.id.wifi_only_switch);
 
         ArrayAdapter<CharSequence> mapTypesAdapter =
             ArrayAdapter.createFromResource(this,
@@ -40,8 +47,9 @@ public class SettingsActivity extends Activity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 savePreference(Constants.PREF_MAP_TYPE, position);
-                mInvertLightness.setVisibility(
-                    position == MapImage.MODE_MAP || position == MapImage.MODE_TERRAIN ? View.VISIBLE : View.GONE);
+                boolean goingToVisible = position == MapImage.MODE_MAP || position == MapImage.MODE_TERRAIN;
+                mInvertLightness.setVisibility(goingToVisible ? View.VISIBLE : View.GONE);
+                enableAnimateLayoutChanges();
             }
 
             @Override
@@ -88,7 +96,24 @@ public class SettingsActivity extends Activity {
             }
         });
 
+        mWiFiOnly.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+                saveBooleanPreference(Constants.PREF_WIFI_ONLY, checked);
+            }
+        });
+
         initFromPreferences();
+    }
+
+    /**
+     * Enable the layout animations for the container layout
+     */
+    private void enableAnimateLayoutChanges() {
+        if (!isVisibilityInitDone) {
+            isVisibilityInitDone = true;
+            mMainView.setLayoutTransition(new LayoutTransition());
+        }
     }
 
     @Override
@@ -112,12 +137,14 @@ public class SettingsActivity extends Activity {
         int mapMode = mPrefs.getInt(Constants.PREF_MAP_TYPE, Constants.PREF_MAP_TYPE_DEFAULT);
         int zoom = mPrefs.getInt(Constants.PREF_ZOOM, Constants.PREF_ZOOM_DEFAULT);
         int updateInterval = mPrefs.getInt(Constants.PREF_UPDATE_INTERVAL, Constants.PREF_UPDATE_INTERVAL_DEFAULT);
+        boolean wifiOnly = mPrefs.getBoolean(Constants.PREF_WIFI_ONLY, Constants.PREF_WIFI_ONLY_DEFAULT);
 
         mInvertLightness.setChecked(isInverted);
         mMapType.setSelection(mapMode);
         mUpdateInterval.setSelection(updateInterval);
         mZoom.setProgress(zoom);
         mZoomValue.setText(String.valueOf(zoom));
+        mWiFiOnly.setChecked(wifiOnly);
     }
 
     private void saveBooleanPreference(String key, boolean value) {

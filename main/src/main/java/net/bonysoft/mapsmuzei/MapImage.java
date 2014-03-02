@@ -91,7 +91,8 @@ public class MapImage {
      */
     public String getImageUrl() {
         return BASE_IMAGE_URL + location.lastLat + ',' + location.lastLong + "&zoom=" + zoom +
-               "&size=1024x1024&scale=2&sensor=false&maptype=" + MODES[mode] + style.toString();
+               "&size=1024x1024&scale=2&sensor=false&maptype=" + MODES[mode] + style.toString() +
+               "&key=" + Config.API_KEY;
     }
 
     /**

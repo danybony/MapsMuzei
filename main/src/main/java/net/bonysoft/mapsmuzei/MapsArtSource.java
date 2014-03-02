@@ -103,6 +103,14 @@ public class MapsArtSource extends RemoteMuzeiArtSource {
     @Override
     protected void onTryUpdate(int reason) throws RetryException {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+
+        // Check if we should cancel the update due to WIFI connection and preference
+        if (prefs.getBoolean(Constants.PREF_WIFI_ONLY, Constants.PREF_WIFI_ONLY_DEFAULT) && !Utils.isWiFiConnected(this)) {
+            if (BuildConfig.DEBUG) Log.d(TAG, "Refresh skipped: no WiFi");
+            scheduleNextUpdate(prefs);
+            return;
+        }
+
         boolean isInverted = prefs.getBoolean(Constants.PREF_INVERTED, Constants.PREF_INVERTED_DEFAULT);
         int mapMode = prefs.getInt(Constants.PREF_MAP_TYPE, Constants.PREF_MAP_TYPE_DEFAULT);
         int zoom = prefs.getInt(Constants.PREF_ZOOM, Constants.PREF_ZOOM_DEFAULT);
@@ -122,6 +130,10 @@ public class MapsArtSource extends RemoteMuzeiArtSource {
                                                   Uri.parse(map.getIntentUrl())))
                            .build());
 
+        scheduleNextUpdate(prefs);
+    }
+
+    private void scheduleNextUpdate(SharedPreferences prefs) {
         int updateTimeIndex = prefs.getInt(Constants.PREF_UPDATE_INTERVAL, Constants.PREF_UPDATE_INTERVAL_DEFAULT);
         int updateMinutes = getResources().getIntArray(R.array.update_frequency_values)[updateTimeIndex];
         if (BuildConfig.DEBUG) Log.d(TAG, "Scheduling update in " + updateMinutes + " minutes");
