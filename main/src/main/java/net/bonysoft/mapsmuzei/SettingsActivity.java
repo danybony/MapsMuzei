@@ -1,15 +1,18 @@
 package net.bonysoft.mapsmuzei;
 
+import android.animation.LayoutTransition;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.*;
 
 public class SettingsActivity extends Activity {
 
+    private ViewGroup mMainView;
     private TextView mZoomValue;
     private Spinner mUpdateInterval;
     private Spinner mMapType;
@@ -19,12 +22,14 @@ public class SettingsActivity extends Activity {
 
     private SharedPreferences mPrefs;
     private boolean isSomethingModified = false;
+    private boolean isVisibilityInitDone = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
 
+        mMainView = (ViewGroup) findViewById(R.id.layout_main);
         mMapType = (Spinner) findViewById(R.id.map_type_spinner);
         mUpdateInterval = (Spinner) findViewById(R.id.update_interval_spinner);
         mInvertLightness = (CheckBox) findViewById(R.id.check_inverse);
@@ -42,8 +47,9 @@ public class SettingsActivity extends Activity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 savePreference(Constants.PREF_MAP_TYPE, position);
-                mInvertLightness.setVisibility(
-                    position == MapImage.MODE_MAP || position == MapImage.MODE_TERRAIN ? View.VISIBLE : View.GONE);
+                boolean goingToVisible = position == MapImage.MODE_MAP || position == MapImage.MODE_TERRAIN;
+                mInvertLightness.setVisibility(goingToVisible ? View.VISIBLE : View.GONE);
+                enableAnimateLayoutChanges();
             }
 
             @Override
@@ -98,6 +104,16 @@ public class SettingsActivity extends Activity {
         });
 
         initFromPreferences();
+    }
+
+    /**
+     * Enable the layout animations for the container layout
+     */
+    private void enableAnimateLayoutChanges() {
+        if (!isVisibilityInitDone) {
+            isVisibilityInitDone = true;
+            mMainView.setLayoutTransition(new LayoutTransition());
+        }
     }
 
     @Override
