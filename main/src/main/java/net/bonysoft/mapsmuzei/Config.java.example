@@ -1,0 +1,9 @@
+package net.bonysoft.mapsmuzei;
+
+
+public class Config {
+    /** Your Google Map Static API Key
+     * (see https://developers.google.com/maps/documentation/staticmaps/#api_key)
+     */
+    public static final String API_KEY = "PUT_YOUR_API_KEY_HERE";
+}
