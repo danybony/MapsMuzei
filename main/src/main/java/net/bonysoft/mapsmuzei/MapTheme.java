@@ -29,6 +29,7 @@ public class MapTheme {
     public static final String XML_TAG_STYLE = "MapStyle";
     public static final String XML_TAG_THEME = "MapTheme";
     public static final String XML_ATTRIBUTE_NAME = "name";
+    public static final String XML_ATTRIBUTE_MAP_TYPE = "mapType";
 
     private static final String MODE_PREFIX = "&maptype=";
     private static final String STYLE_PREFIX = "&style=";
@@ -97,6 +98,8 @@ public class MapTheme {
             assert xrp != null;
 
             if (findThemeFromXml(themeName, xrp)) {
+                readMapType(newTheme, xrp);
+
                 // Load all the styles associated to the theme
                 readThemeStyles(newTheme, xrp);
             }
@@ -106,6 +109,24 @@ public class MapTheme {
         }
 
         return newTheme;
+    }
+
+    private static void readMapType(MapTheme newTheme, XmlResourceParser xrp) {
+        String mapType = xrp.getAttributeValue(null, XML_ATTRIBUTE_MAP_TYPE);
+        if (mapType != null) {
+            newTheme.setMapMode(getMapTypeIdFromString(mapType));
+        }
+    }
+
+    private static int getMapTypeIdFromString(String mapTypeName) {
+        int i=0;
+        for (String s : MODES) {
+            if (s.equals(mapTypeName)) {
+                return i;
+            }
+            i++;
+        }
+        return MODE_MAP;
     }
 
     /**
@@ -123,7 +144,6 @@ public class MapTheme {
             if (eventType == XmlPullParser.START_TAG
                 && xrp.getName().equalsIgnoreCase(XML_TAG_THEME)
                 && themeName.equals(xrp.getAttributeValue(null, XML_ATTRIBUTE_NAME))) {
-                eventType = xrp.next();
                 break;
             }
             eventType = xrp.next();
@@ -139,7 +159,7 @@ public class MapTheme {
      * @throws IOException
      */
     private static void readThemeStyles(MapTheme newTheme, XmlResourceParser xrp) throws XmlPullParserException, IOException {
-        int eventType = xrp.getEventType();
+        int eventType = xrp.next();
         while (!(eventType == XmlPullParser.END_TAG && xrp.getName().equalsIgnoreCase(XML_TAG_THEME))) {
             if (eventType == XmlPullParser.START_TAG
                 && xrp.getName().equalsIgnoreCase(XML_TAG_STYLE)) {
