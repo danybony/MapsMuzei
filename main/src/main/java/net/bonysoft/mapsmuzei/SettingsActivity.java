@@ -47,7 +47,7 @@ public class SettingsActivity extends Activity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 savePreference(Constants.PREF_MAP_TYPE, position);
-                boolean goingToVisible = position == MapImage.MODE_MAP || position == MapImage.MODE_TERRAIN;
+                boolean goingToVisible = position == MapTheme.MODE_MAP || position == MapTheme.MODE_TERRAIN;
                 mInvertLightness.setVisibility(goingToVisible ? View.VISIBLE : View.GONE);
                 enableAnimateLayoutChanges();
             }

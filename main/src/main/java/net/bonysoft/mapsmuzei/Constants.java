@@ -10,7 +10,7 @@ public class Constants {
 
     // Default values
     public static final boolean PREF_INVERTED_DEFAULT = true;
-    public static final int PREF_MAP_TYPE_DEFAULT = MapImage.MODE_MAP;
+    public static final int PREF_MAP_TYPE_DEFAULT = MapTheme.MODE_MAP;
     public static final int PREF_ZOOM_DEFAULT = 15;
     public static final int PREF_UPDATE_INTERVAL_DEFAULT = 1;
     public static final boolean PREF_WIFI_ONLY_DEFAULT = false;
