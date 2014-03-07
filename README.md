@@ -12,9 +12,9 @@ set of famous places from all around the world.
 - Several map styles
 - Different zoom levels
 - Custom update times
+- Optionally only download maps on Wi-Fi
 
 ## Coming soon
-- Optionally only download maps on Wi-Fi
 - Add other map themes
 - Download new maps only if the location is changed
 
