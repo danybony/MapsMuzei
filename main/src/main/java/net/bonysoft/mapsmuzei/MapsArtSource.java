@@ -111,14 +111,20 @@ public class MapsArtSource extends RemoteMuzeiArtSource {
             return;
         }
 
-        boolean isInverted = prefs.getBoolean(Constants.PREF_INVERTED, Constants.PREF_INVERTED_DEFAULT);
-        int mapMode = prefs.getInt(Constants.PREF_MAP_TYPE, Constants.PREF_MAP_TYPE_DEFAULT);
+        MapTheme style;
         int zoom = prefs.getInt(Constants.PREF_ZOOM, Constants.PREF_ZOOM_DEFAULT);
+        int mapTheme = prefs.getInt(Constants.PREF_MAP_TYPE, Constants.PREF_MAP_TYPE_DEFAULT);
+        if (MapTheme.isStandardTheme(mapTheme)) {
+            style = new MapTheme();
+            style.setMapMode(mapTheme);
+            boolean isInverted = prefs.getBoolean(Constants.PREF_INVERTED, Constants.PREF_INVERTED_DEFAULT);
+            style.setInverted(isInverted);
+        }
+        else {
+            style = MapTheme.loadCustomTheme(this, mapTheme);
+        }
 
-        MapStyle style = new MapStyle();
-        style.setInverted(isInverted);
-
-        MapImage map = new MapImage(this, mapMode, zoom, style);
+        MapImage map = new MapImage(this, zoom, style);
 
         if (BuildConfig.DEBUG) Log.d(TAG, "Publishing map: " + map.getTitle() + " URL:" + map.getImageUrl());
         publishArtwork(new Artwork.Builder()

@@ -16,28 +16,19 @@ public class MapImage {
 
     private static final String TAG = MapImage.class.getSimpleName();
 
-    public static final int MODE_MAP = 0;
-    public static final int MODE_SATELLITE = 1;
-    public static final int MODE_TERRAIN = 2;
-    public static final int MODE_HYBRID = 3;
-
-    public static final String[] MODES = {"roadmap", "satellite", "terrain", "hybrid"};
-
     private static final String BASE_IMAGE_URL = "https://maps.googleapis.com/maps/api/staticmap?center=";
     private static final String BASE_INTENT_URL = "https://www.google.it/maps/@";
 
     private final Context context;
     private final LocationInfo location;
     private final String token;
-    private final int mode;
     private final int zoom;
-    private final MapStyle style;
+    private final MapTheme style;
     private String title = "";
     private String description = "";
 
-    public MapImage(Context context, int mode, int zoom, MapStyle style) {
+    public MapImage(Context context, int zoom, MapTheme style) {
         this.context = context;
-        this.mode = mode;
         this.zoom = zoom;
         this.style = style;
 
@@ -91,7 +82,7 @@ public class MapImage {
      */
     public String getImageUrl() {
         return BASE_IMAGE_URL + location.lastLat + ',' + location.lastLong + "&zoom=" + zoom +
-               "&size=1024x1024&scale=2&sensor=false&maptype=" + MODES[mode] + style.toString() +
+               "&size=1024x1024&scale=2&sensor=false" + style.toString() +
                "&key=" + Config.API_KEY;
     }
 
