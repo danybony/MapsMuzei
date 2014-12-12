@@ -26,8 +26,14 @@ public class MapTheme {
 
     public static final String[] MODES = {"roadmap", "satellite", "terrain", "hybrid"};
 
+    public static final int SOURCE_GOOGLE = 0;
+    public static final int SOURCE_MAPBOX = 1;
+
+    public static final String[] SOURCES = {"google", "mapbox"};
+
     public static final String XML_TAG_STYLE = "MapStyle";
     public static final String XML_TAG_THEME = "MapTheme";
+    public static final String XML_TAG_SOURCE = "MapSource";
     public static final String XML_ATTRIBUTE_NAME = "name";
     public static final String XML_ATTRIBUTE_MAP_TYPE = "mapType";
 
@@ -37,11 +43,13 @@ public class MapTheme {
 
     private boolean isInverted = false;
     int mode = MODE_MAP;
+    int source = SOURCE_GOOGLE;
     private ArrayList<String> styles = new ArrayList<String>();
 
     public void setMapMode(int mode) {
         this.mode = mode;
     }
+    public void setMapSource(int source) { this.source = source; }
 
     public void setInverted(boolean isInverted) {
         this.isInverted = isInverted;
@@ -99,7 +107,7 @@ public class MapTheme {
 
             if (findThemeFromXml(themeName, xrp)) {
                 readMapType(newTheme, xrp);
-
+                readMapSource(newTheme, xrp);
                 // Load all the styles associated to the theme
                 readThemeStyles(newTheme, xrp);
             }
@@ -118,6 +126,13 @@ public class MapTheme {
         }
     }
 
+    private static void readMapSource(MapTheme newTheme, XmlResourceParser xrp) {
+        String mapSource = xrp.getAttributeValue(null, XML_TAG_SOURCE);
+        if (mapSource != null) {
+            newTheme.setMapSource(getMapSourceIdFromString(mapSource));
+        }
+    }
+
     private static int getMapTypeIdFromString(String mapTypeName) {
         int i=0;
         for (String s : MODES) {
@@ -127,6 +142,17 @@ public class MapTheme {
             i++;
         }
         return MODE_MAP;
+    }
+
+    private static int getMapSourceIdFromString(String mapSourceName) {
+        int i=0;
+        for (String s : SOURCES) {
+            if (s.equals(mapSourceName)) {
+                return i;
+            }
+            i++;
+        }
+        return SOURCE_GOOGLE;
     }
 
     /**

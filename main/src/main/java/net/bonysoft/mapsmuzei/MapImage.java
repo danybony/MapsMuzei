@@ -16,8 +16,8 @@ public class MapImage {
 
     private static final String TAG = MapImage.class.getSimpleName();
 
-    private static final String BASE_IMAGE_URL = "https://maps.googleapis.com/maps/api/staticmap?center=";
-    private static final String BASE_INTENT_URL = "https://www.google.it/maps/@";
+    private static final String GOOGLE_BASE_IMAGE_URL = "https://maps.googleapis.com/maps/api/staticmap?center=";
+    private static final String GOOGLE_BASE_INTENT_URL = "https://www.google.it/maps/@";
 
     private final Context context;
     private final LocationInfo location;
@@ -81,16 +81,22 @@ public class MapImage {
      * This URL will be used by Muzei to fetch the actual image
      */
     public String getImageUrl() {
-        return BASE_IMAGE_URL + location.lastLat + ',' + location.lastLong + "&zoom=" + zoom +
-               "&size=1024x1024&scale=2&sensor=false" + style.toString() +
-               "&key=" + Config.GOOGLE_API_KEY;
+        if (style.source == style.SOURCE_GOOGLE) {
+            return GOOGLE_BASE_IMAGE_URL + location.lastLat + ',' + location.lastLong + "&zoom=" + zoom +
+                    "&size=1024x1024&scale=2&sensor=false" + style.toString() +
+                    "&key=" + Config.GOOGLE_API_KEY;
+        } else {
+            return GOOGLE_BASE_IMAGE_URL + location.lastLat + ',' + location.lastLong + "&zoom=" + zoom +
+                    "&size=1024x1024&scale=2&sensor=false" + style.toString() +
+                    "&key=" + Config.GOOGLE_API_KEY;
+        }
     }
 
     /**
      * This URL will be used by Muzei when someone click on the description of the map, opening Google Maps
      */
     public String getIntentUrl() {
-        return BASE_INTENT_URL + location.lastLat + "," + location.lastLong
+        return GOOGLE_BASE_INTENT_URL + location.lastLat + "," + location.lastLong
                + "," + zoom+"z";
     }
 
