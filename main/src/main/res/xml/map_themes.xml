@@ -1,14 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <MapThemes>
-    <MapTheme name="Sepia" mapType="roadmap">
-        <MapSource>google</MapSource>
+    <MapTheme name="Sepia" mapType="roadmap" mapSource="google">
         <MapStyle>saturation:-70</MapStyle>
         <MapStyle>style=hue:0x704214</MapStyle>
         <MapStyle>lightness:-15</MapStyle>
     </MapTheme>
 
-    <MapTheme name="Neon" mapType="roadmap">
-        <MapSource>google</MapSource>
+    <MapTheme name="Neon" mapType="roadmap" mapSource="google">
         <MapStyle>feature:poi%7Clightness:-50</MapStyle>
         <MapStyle>feature:landscape%7Clightness:-100</MapStyle>
         <MapStyle>feature:road%7Chue:0xff00ff</MapStyle>
@@ -18,4 +16,6 @@
         <MapStyle>feature:road%7Celement:labels.text.stroke%7Ccolor:0xcf02cf</MapStyle>
         <MapStyle>feature:administrative%7Celement:labels.text.stroke%7Ccolor:0x009cff</MapStyle>
     </MapTheme>
+
+    <MapTheme name="Pencil" mapSource="mapbox" mapId="tomtaylor.3edcd891"></MapTheme>
 </MapThemes>

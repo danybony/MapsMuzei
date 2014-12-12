@@ -33,9 +33,10 @@ public class MapTheme {
 
     public static final String XML_TAG_STYLE = "MapStyle";
     public static final String XML_TAG_THEME = "MapTheme";
-    public static final String XML_TAG_SOURCE = "MapSource";
     public static final String XML_ATTRIBUTE_NAME = "name";
     public static final String XML_ATTRIBUTE_MAP_TYPE = "mapType";
+    public static final String XML_ATTRIBUTE_MAP_SOURCE = "mapSource";
+    public static final String XML_ATTRIBUTE_MAP_ID = "mapId";
 
     private static final String MODE_PREFIX = "&maptype=";
     private static final String STYLE_PREFIX = "&style=";
@@ -44,12 +45,15 @@ public class MapTheme {
     private boolean isInverted = false;
     int mode = MODE_MAP;
     int source = SOURCE_GOOGLE;
+    String mapId;
     private ArrayList<String> styles = new ArrayList<String>();
 
     public void setMapMode(int mode) {
         this.mode = mode;
     }
     public void setMapSource(int source) { this.source = source; }
+    public void setMapId(String mapId) { this.mapId = mapId; }
+    public String getMapId() { return this.mapId; }
 
     public void setInverted(boolean isInverted) {
         this.isInverted = isInverted;
@@ -106,8 +110,12 @@ public class MapTheme {
             assert xrp != null;
 
             if (findThemeFromXml(themeName, xrp)) {
-                readMapType(newTheme, xrp);
-                readMapSource(newTheme, xrp);
+                int mapSource = readMapSource(newTheme, xrp);
+                if (mapSource == SOURCE_GOOGLE) {
+                    readMapType(newTheme, xrp);
+                } else if (mapSource == SOURCE_MAPBOX) {
+                    readMapId(newTheme, xrp);
+                }
                 // Load all the styles associated to the theme
                 readThemeStyles(newTheme, xrp);
             }
@@ -126,10 +134,19 @@ public class MapTheme {
         }
     }
 
-    private static void readMapSource(MapTheme newTheme, XmlResourceParser xrp) {
-        String mapSource = xrp.getAttributeValue(null, XML_TAG_SOURCE);
+    private static int readMapSource(MapTheme newTheme, XmlResourceParser xrp) {
+        String mapSource = xrp.getAttributeValue(null, XML_ATTRIBUTE_MAP_SOURCE);
         if (mapSource != null) {
             newTheme.setMapSource(getMapSourceIdFromString(mapSource));
+            return getMapSourceIdFromString(mapSource);
+        }
+        return SOURCE_GOOGLE;
+    }
+
+    private static void readMapId(MapTheme newTheme, XmlResourceParser xrp) {
+        String mapId = xrp.getAttributeValue(null, XML_ATTRIBUTE_MAP_ID);
+        if (mapId != null) {
+            newTheme.setMapId(mapId);
         }
     }
 
