@@ -83,7 +83,7 @@ public class MapImage {
     public String getImageUrl() {
         return BASE_IMAGE_URL + location.lastLat + ',' + location.lastLong + "&zoom=" + zoom +
                "&size=1024x1024&scale=2&sensor=false" + style.toString() +
-               "&key=" + Config.API_KEY;
+               "&key=" + Config.GOOGLE_API_KEY;
     }
 
     /**
