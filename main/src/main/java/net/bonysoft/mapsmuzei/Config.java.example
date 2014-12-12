@@ -5,5 +5,10 @@ public class Config {
     /** Your Google Map Static API Key
      * (see https://developers.google.com/maps/documentation/staticmaps/#api_key)
      */
-    public static final String API_KEY = "PUT_YOUR_API_KEY_HERE";
+    public static final String GOOGLE_API_KEY = "PUT_YOUR_API_KEY_HERE";
+
+    /** Your MapBox Static API Key
+     * (see https://www.mapbox.com/developers/api/static/)
+     */
+    public static final String MAPBOX_API_KEY = "PUT_YOUR_API_KEY_HERE";
 }
